@@ -1,0 +1,22 @@
+% anasquel6; analyse d'un squelette (*** version 1.9 ***)
+%anasquel7 % V1.10
+anasquel8 % V1.11
+%
+figure('Name','Squelette analyse');
+colormap(jet);
+imagesc(im);
+
+distance1; % calcul des distances entre les sommets du graphe
+% Le nom de ce script a ete change de distance en distance1
+
+[ini,som_trouve] = sommet(idep,jdep,icar,jcar); %ini no sommet de depart
+if ~som_trouve
+    disp (['Le pixel de depart ( ',num2str(idep),',', num2str(jdep), ') ','n''est pas un sommet du graphe']);
+    return;
+end % on est sur que le pixel de depart est un sommet du graphe, son numero est ini
+
+% Calcul des largeurs minimales de tous les troncons du graphe.
+epaisseur; % epais{i}(k) contient la largeur minimale du troncon (i, graphe{i}(k))
+
+% Reduction du graphe pour obtenir un graphe compatible avec le diametre du robot
+graphereduit;
