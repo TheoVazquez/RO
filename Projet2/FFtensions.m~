@@ -1,0 +1,115 @@
+% Algorithme de *Ford-Fulkerson* pour les tensions
+%
+
+%
+%% Algorithme de FF
+function [listePred] = getPred(ANT, sommet)
+listePred = []; %vecteur des prédécesseurs du sommet som
+n=size(ANT,1); %nombre de sommets
+for i = 1:n
+    if ANT(i,sommet) ~= -1
+        listePred = [listePred i]; %liste les antecedants du sommet som
+    end
+end
+
+
+function [chemincrit, tpscrit, tps] = FFtensions(NSUC,SUC,LONG)
+n = size(NSUC,2);
+X = uint16(1:n); % X contient la liste des sommets de G
+m = sum(NSUC);
+% n == nombre de sommets
+% m == nombre d'arcs
+% Vecteur du nombre de successeurs de chaque sommet : NSUC
+% Vecteur des successeurs de chaque sommet : SUC
+% Vecteur des longueurs de chaque arc : LONG
+
+%création d'une matrice ANT pour le graphe
+ANT = zeros(n,n)-1;
+nbsucv = 0; %nombre de succ visiter
+for i = 1:n
+    for j = 1:NSUC(i)
+        ANT(i,SUC(nbsucv + j)) = LONG(nbsucv + j);
+    end
+    nbsucv = nbsucv + NSUC(i);
+end
+tpscrit = zeros(1,n);
+chemincrit = zeros(n,n) -1;
+for sommetActuel = 3:n
+    for sommetPred = getPred(ANT,sommetActuel)
+        %Pour chaque prédecesseur, on fait la somme entre crit du pred et
+        %temps entre pred et sommetActuel
+        tps = tpscrit(sommetPred) + ANT(sommetPred , sommetActuel);
+        if tps > tpscrit(sommetActuel) 
+            %mise a jour
+            tpscrit(sommetActuel) = tps;
+            %maj de chemin
+            for step = 1:n
+                %Si l'on doit ajouter un nouveau step au chemin crit du
+                %sommet actuel
+                if (chemincrit(sommetPred, step) == -1)
+                    %Ajout du sommetPred au chemin crit du sommet actuel
+                    chemincrit(sommetActuel,step) = sommetPred
+                    break
+                else
+                %Sinon on ajoute le step du chemin pred au fur et à mesure
+                    chemincrit(sommetActuel,step) =  chemincrit(sommetPred, step)
+                end
+            end
+            chemincrit(sommetActuel) = [chemincrit(sommetPred) sommetActuel]
+        end 
+    end 
+end
+%Calcul du dernier sommet
+sommetActuel = 1
+for sommetPred = getPred(ANT,sommetActuel)
+    tps = tpscrit(sommetPred) + ANT(sommetPred , sommetActuel);
+    if tps > tpscrit(sommetActuel) 
+        tpscrit(sommetActuel) = tps;
+        chemincrit(sommetActuel) = [chemincrit(sommetPred) sommetActuel]
+        for step = 1:n
+            if (chemincrit(sommetPred, step) == -1)
+                chemincrit(sommetActuel,step) = sommetPred
+                break
+            else
+                chemincrit(sommetActuel,step) =  chemincrit(sommetPred, step)
+            end
+        end
+    end 
+end 
+
+
+%% TEST%%
+
+
+%% Initialisations
+NSUC = uint16([3 1 1 3 2 2 3 2 1 1 1]);
+n = size(NSUC,2);
+X = uint16(1:n); % X contient la liste des sommets de G
+m = sum(NSUC);
+%
+% Vecteur des successeurs de chaque sommet : SUC
+SUC = uint16([3 4 5 1 6 6 7 8 8 11 9 10 9 10 11 9 10 2 2 2]);
+%
+% Vecteur des longueurs de chaque arc
+LONG = [5 0 3 inf 16 14 14 14 20 10 8 8 18 18 18 25 25 10 15 17];
+
+
+
+% MARQUE = false(1,n);
+% MARQUE(2) = true;
+% 
+% while ~MARQUE(1) 
+%     for sommetActuel=2:n 
+%         for suc = sum(NSUC(1:sommetActuel+-1)) + 1 : sum(NSUC(1:sommetActuel-1)) + NSUC(sommetActuel)
+%            if LONG(suc)+tpscrit(sommetActuel) >tpscrit(suc) 
+%               tpscrit(suc) = LONG(suc) ;
+%            end
+%            MARQUE(suc) = true;
+%         end    
+%     end
+%     
+% end
+
+
+
+
