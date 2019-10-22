@@ -1,0 +1,29 @@
+function [beta,vcycle] = get_chaine(has_marqued,phi, beta, CAPACITE, NSUC,X,SUC, ANT_matrix)
+%UNTITLED Summary of this function goes here
+%   Detailed explanation goes here
+vcycle = zeros(1, size(phi, 2));
+sommet_courant = 2 ;
+has_marqued
+while sommet_courant ~= 1
+    som_precedt = has_marqued(sommet_courant)
+    sommet_courant
+    
+    
+    [coeff_sens, vcycle] = maj_vcycle_REVERSE(has_marqued(sommet_courant),sommet_courant,vcycle, NSUC,X,SUC, ANT_matrix)
+    coeff_sens
+    sommet_courant
+    has_marqued(sommet_courant)
+    if coeff_sens==-1 % si le lien est un reverse
+        capa_k = get_capacite_arc_REVERSE(sommet_courant,has_marqued(sommet_courant),CAPACITE,NSUC,X,SUC)
+        flot_k = get_flot_arc_REVERSE(sommet_courant,has_marqued(sommet_courant),phi, NSUC,X,SUC)
+    else
+        capa_k = get_capacite_arc_REVERSE(has_marqued(sommet_courant),sommet_courant,CAPACITE,NSUC,X,SUC)
+        flot_k = get_flot_arc_REVERSE(has_marqued(sommet_courant),sommet_courant,phi, NSUC,X,SUC)
+    end
+    beta = min(beta,coeff_sens*(capa_k- flot_k))
+    sommet_courant = has_marqued(sommet_courant);
+end
+vcycle
+beta
+end
+

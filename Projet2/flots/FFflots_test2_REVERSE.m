@@ -15,27 +15,27 @@
 %
 %% Initialisations
 %NSUC = uint16([3 0 3 1 2 3 2 2]);
-
+NSUC = uint16([2 0 2 1]); % ex2
 NSUC = uint16([2 0 2 1]); % ex3
 NSUC = uint16([2 0 2 1 2 1]); % ex4
-NSUC = uint16([2 0 2 1]); % ex2
+
 n = size(NSUC,2);
 X = uint16(1:n); % X contient la liste des sommets de G
 m = sum(NSUC);
 %
 % Vecteur des successeurs de chaque sommet : SUC
 %SUC = uint16([2 3 4 4 5 6 8 6 7 4 7 8 5 2 7 2]);
-
+SUC = uint16([3 4 2 4 2]); % ex2
 SUC = uint16([3 4 2 4 2]); % ex3
 SUC = uint16([3 5 4 6 2 4 6 2]); % ex4
-SUC = uint16([3 4 2 4 2]); % ex2
+
 %
 % Vecteur des capacites de chaque arc
 %CAPACITE = [inf 1 2 5 3 3 2 0 3 1 3 7 2 1 2 4];
-
+CAPACITE = [1 4 5 2 3]; % ex2
 CAPACITE = [3 2 2 2 3]; % ex3
 CAPACITE = [3 8 4 2 4 6 3 9]; % ex4
-CAPACITE = [1 4 5 2 3]; % ex2
+
 %
 % Vecteur de la flot courante phi
 phi = zeros(1,m);
@@ -79,13 +79,28 @@ while PUIT_MARQUABLE
                     end
                 end
                 %AA
+                %BB
+                prede_i = find(ANT(:,i)>-1)'
+                if length(prede_i) > 0
+                    for k = prede_i % k sont les predecesseurs du marqué
+                        i
+                        k
+                        j = k % predecesseur de i
+
+                        if get_flot_arc_REVERSE(j,i,phi, NSUC,X,SUC)>0 && ~ MARQUE(j) && ~ MARQUE_new(j)
+                            MARQUE_new(j)=true; % on marque le successeur j
+                            has_marqued(j)=i  % ou has_marqued(k)=l  on dit que c'est i qui a marqué j
+                        end
+                    end
+                end
+                %BB
             end
             
         end
         MARQUE=MARQUE_new;
     end
     if MARQUE(2)
-        [beta, vcycle] = get_chaine(has_marqued, phi,beta, CAPACITE, NSUC,X,SUC);
+        [beta, vcycle] = get_chaine_REVERSE(has_marqued, phi,beta, CAPACITE, NSUC,X,SUC, ANT);
         phi = phi + beta*vcycle;
     else
         flot_max = get_flot_max(phi, NSUC)
