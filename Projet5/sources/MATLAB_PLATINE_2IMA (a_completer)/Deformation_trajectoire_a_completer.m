@@ -29,8 +29,8 @@ if isfield(T,'nbrecollision')
         cprintf([1,0,1],'On change la trajectoire de l''objet 1');
         disp(' ');
 %% ---------------------------------------------------------------------
-        x_pts_controle = '??';
-        y_pts_controle = '??';
+        x_pts_controle = T(1).nurbs.coefs(1,:); %x
+        y_pts_controle = T(1).nurbs.coefs(2,:); %y
         for k=2:nombre_objets
             % on regarde s'il y a eu collision de l'objet 1 avec l'objet k
             if nbrecollision(k) > 0
@@ -42,7 +42,7 @@ if isfield(T,'nbrecollision')
                 collision(k,:,:,:) = T(k).collision;
                 % Determination du nocollision-eme pt de collision de 1
                 % avec k
-                pt_collision = '??';
+                pt_collision = [T(1).collision(1,k,1,nocollision) , T(1).collision(1,k,2,nocollision)];
                 %
                 nbre_pts_controle = T(1).nurbs.number;
                 % Calcul de la distance minimale du pt de collision aux
