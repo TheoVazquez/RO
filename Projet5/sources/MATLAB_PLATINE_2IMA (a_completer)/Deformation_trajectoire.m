@@ -66,18 +66,18 @@ if isfield(T,'nbrecollision')
                 %
                 % Calcul de lambda
                 %
-                sumray = '??'; % somme des rayons de 1 et de k
-                marge = '??'; % valeur de la marge en unites pixels  pour le calcul de lambda
-                lambda = '??';
+                sumray = (T(1).diametre_robot)/2 + (T(k).diametre_robot)/2 % somme des rayons de 1 et de k
+                marge = 2; % valeur de la marge en unites pixels  pour le calcul de lambda
+                lambda = (sumray + marge) / norm(deplacement);
                 %
                 nouveau_pt_controle(1) = pt_collision(1) + lambda * deplacement(1);
                 nouveau_pt_controle(2) = pt_collision(2) + lambda * deplacement(2);
-                poids_n_pt_c = '??'; % Il faut donner un poids fort au nouveau pt de controle issu de la collisuon
+                poids_n_pt_c = 10; % Il faut donner un poids fort au nouveau pt de controle issu de la collisuon
                 %
-                T(1).nurbs.coefs(1,iref+1:nbre_pts_controle + 1) = '??';
-                T(1).nurbs.coefs(2,iref+1:nbre_pts_controle + 1) = '??';
-                T(1).nurbs.coefs(3,:) = '??';
-                T(1).nurbs.coefs(4,iref+1:nbre_pts_controle + 1) = '??';
+                T(1).nurbs.coefs(1,iref+1:nbre_pts_controle + 1) =  nouveau_pt_controle(1); %On rajoute notre nouveau point de controle
+                T(1).nurbs.coefs(2,iref+1:nbre_pts_controle + 1) = nouveau_pt_controle(2);
+                %T(1).nurbs.coefs(3,:) = '??';
+                T(1).nurbs.coefs(4,iref+1:nbre_pts_controle + 1) = poids_n_pt_c; %choisi arbitrairement (doit être grand)
                 %
                 nbre_pts_controle = nbre_pts_controle + 1;
                 T(1).nurbs.number = nbre_pts_controle;
