@@ -44,7 +44,7 @@ for sommetActuel = 3:n
                 if (chemincrit(sommetPred, step) == -1)
                     %Ajout du sommetPred au chemin crit du sommet actuel
                     chemincrit(sommetActuel,step) = sommetActuel;
-                    chemincrit(sommetActuel,:)
+                    %chemincrit(sommetActuel,:);
                     break
                 else
                 %Sinon on ajoute le step du chemin pred au fur et à mesure
@@ -56,8 +56,8 @@ for sommetActuel = 3:n
 end
 %Calcul du dernier sommet
 disp("TRAITEMENT DE 1")
-sommetActuel = 1
-ANT
+sommetActuel = 1;
+ANT;
 for sommetPred = getPred(ANT,sommetActuel)
     
     tps = tpscrit(sommetPred) + ANT(sommetPred , sommetActuel);
@@ -66,14 +66,15 @@ for sommetPred = getPred(ANT,sommetActuel)
         tpscrit(sommetActuel) = tps;
         for step = 2:n
             if (chemincrit(sommetPred, step) == -1)
-                chemincrit(sommetActuel,step) = sommetActuel
+                chemincrit(sommetActuel,step) = sommetActuel;
                 break
             else
-                chemincrit(sommetActuel,step) =  chemincrit(sommetPred, step)
+                chemincrit(sommetActuel,step) =  chemincrit(sommetPred, step);
             end
         end
     end 
 end 
+tps = tpscrit(1);
 
 
 

@@ -1,3 +1,4 @@
+%cette fonction liste les prédécesseurs d'un sommet
 function [listePred] = getPred(ANT, sommet)
 listePred = []; %vecteur des prédécesseurs du sommet som
 n=size(ANT,1); %nombre de sommets
